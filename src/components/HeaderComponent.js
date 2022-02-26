@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: hp(6),
     backgroundColor: '#555',
-    borderBottomLeftRadius: wp(4),
-    borderBottomRightRadius: wp(4),
+    // borderBottomLeftRadius: wp(4),
+    // borderBottomRightRadius: wp(4),
     alignItems: 'center',
   },
   titleStyle: {

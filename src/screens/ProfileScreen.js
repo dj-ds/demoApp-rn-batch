@@ -20,11 +20,11 @@ export default class ProfileScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <HeaderComponent title="Profile" nav={this.props.navigation} />
+        {/* <HeaderComponent title="Profile" nav={this.props.navigation} /> */}
         <View style={{flex: 1}}>
           <Text>Profile Screen</Text>
         </View>
-        <FooterComponent title="Profile" nav={this.props.navigation} />
+        {/* <FooterComponent title="Profile" nav={this.props.navigation} /> */}
       </View>
     );
   }
@@ -33,5 +33,6 @@ export default class ProfileScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'green',
   },
 });
