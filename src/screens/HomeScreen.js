@@ -2,54 +2,32 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-
 // Library
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import ImageSlider from 'react-native-image-slider';
 
 // Components Import
 import HeaderComponent from '../components/HeaderComponent';
-import FooterComponent from '../components/FooterComponent';
 
-import ExtraScreen from '../screens/ExtraScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+// Images
+import banner1 from '../assets/images/banner1.jpg';
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      activeTab: 'Profile',
-    };
+    this.state = {};
   }
 
-  renderTabView = () => {
-    const {activeTab} = this.state;
-
-    if (activeTab === 'Profile') {
-      return <ProfileScreen />;
-    } else if (activeTab === 'Extra') {
-      return <ExtraScreen />;
-    }
+  handleNavProfile = () => {
+    this.props.navigation.navigate('Profile');
   };
 
-  handleChangeTab = tabName => () => {
-    this.setState({activeTab: tabName});
+  handleNavNotification = () => {
+    this.props.navigation.navigate('Notification');
   };
-
-  onSwipeLeft(gestureState) {
-    if (this.state.activeTab !== 'Extra') {
-      this.setState({activeTab: 'Extra'});
-    }
-  }
-
-  onSwipeRight(gestureState) {
-    if (this.state.activeTab !== 'Profile') {
-      this.setState({activeTab: 'Profile'});
-    }
-  }
 
   render() {
     const {activeTab} = this.state;
@@ -61,39 +39,28 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <HeaderComponent title="Home" nav={this.props.navigation} />
 
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={
-              activeTab === 'Profile'
-                ? styles.tabActiveButton
-                : styles.tabButton
-            }
-            onPress={this.handleChangeTab('Profile')}>
-            <Text style={styles.tabTextStyles}>Profile</Text>
-          </TouchableOpacity>
+        <ImageSlider
+          images={[banner1, banner1, banner1]}
+          //       images={[
+          //   'https://placeimg.com/640/640/nature',
+          //   'https://placeimg.com/640/640/people',
+          //   'https://placeimg.com/640/640/animals',
+          //   'https://placeimg.com/640/640/beer',
+          // ]}
+          loopBothSides
+          autoPlayWithInterval={3000}
+        />
 
-          <TouchableOpacity
-            style={
-              activeTab === 'Extra' ? styles.tabActiveButton : styles.tabButton
-            }
-            onPress={this.handleChangeTab('Extra')}>
-            <Text style={styles.tabTextStyles}>Extra</Text>
-          </TouchableOpacity>
-        </View>
-
-        <GestureRecognizer
-          // onSwipe={(direction, state) => this.onSwipe(direction, state)}
-          onSwipeLeft={state => this.onSwipeLeft(state)}
-          onSwipeRight={state => this.onSwipeRight(state)}
-          config={config}
-          style={{
-            flex: 1,
-            backgroundColor: this.state.backgroundColor,
-          }}>
-          <View style={styles.mainContainer}>{this.renderTabView()}</View>
-        </GestureRecognizer>
-
-        {/* <FooterComponent title="Home" nav={this.props.navigation} /> */}
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.handleNavProfile}>
+          <Text style={styles.buttonText}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.handleNavNotification}>
+          <Text style={styles.buttonText}>Notification</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -106,32 +73,20 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
-  tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  tabButton: {
-    height: hp(8.5),
-    flex: 1,
+  buttonContainer: {
+    height: hp(15),
+    backgroundColor: '#00adcc',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#999',
-    borderBottomWidth: 4,
-    borderBottomColor: '#999',
+    // borderWidth: 1,
+    margin: wp(2),
+    borderRadius: wp(4),
+    elevation: 15,
   },
-  tabActiveButton: {
-    height: hp(8.5),
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#666',
-    borderBottomWidth: 4,
-    borderBottomColor: '#ddd',
-  },
-  tabTextStyles: {
+
+  buttonText: {
     color: '#fff',
-    fontSize: wp(3.5),
+    fontSize: wp(3.8),
     fontWeight: '700',
   },
 });

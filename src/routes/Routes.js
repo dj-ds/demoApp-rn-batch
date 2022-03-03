@@ -6,7 +6,9 @@ import LoginScreen from '../screens/LoginScreen';
 import OTPScreen from '../screens/OtpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 import ExtraScreen from '../screens/ExtraScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const LoggedOutNavigator = createStackNavigator(
   {
@@ -19,14 +21,17 @@ const LoggedOutNavigator = createStackNavigator(
   },
 );
 
-const LoggedInNavigator = createSwitchNavigator(
+const LoggedInNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Profile: ProfileScreen,
+    EditProfile: EditProfileScreen,
     Extra: ExtraScreen,
+    Notification: NotificationScreen,
   },
   {
     initialRouteName: 'Home',
+    headerMode: 'none',
   },
 );
 
