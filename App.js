@@ -3,9 +3,9 @@ import {Text, View} from 'react-native';
 
 import {LogBox} from 'react-native';
 
-LogBox.ignoreLogs([
-  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-]);
+// Ignore log notification by message:
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 // Routes
 import {createAppContainer} from 'react-navigation';
@@ -14,6 +14,15 @@ import {nsSetTopLevelNavigator} from './src/routes/NavigationService';
 
 // User Preference
 import {KEYS, getData} from './src/api/UserPreference';
+
+// Firebase API
+import {
+  checkPermission,
+  createOnTokenRefreshListener,
+  removeOnTokenRefreshListener,
+  createNotificationListeners,
+  removeNotificationListeners,
+} from './src/firebase_api/FirebaseAPI';
 
 export default class App extends Component {
   constructor(props) {
@@ -28,16 +37,32 @@ export default class App extends Component {
     this.initialSetup();
   }
 
+  componentWillUnmount() {
+    // Removing firebase listeners
+    removeOnTokenRefreshListener(this);
+    removeNotificationListeners(this);
+  }
+
   initialSetup = async () => {
     try {
-      const userInfo = await getData(KEYS.USER_INFO);
+      // checking fcm permission
+      await checkPermission();
 
+      // Adding firebase listeners
+      createOnTokenRefreshListener(this);
+      createNotificationListeners(this);
+
+      const userInfo = await getData(KEYS.USER_INFO);
       const isLoggedIn = userInfo ? true : false;
 
       this.setState({isLoggedIn});
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  setNavigatorRef = ref => {
+    nsSetTopLevelNavigator(ref);
   };
 
   render() {

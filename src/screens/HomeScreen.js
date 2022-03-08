@@ -1,25 +1,63 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, AppState} from 'react-native';
 
 // Library
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import ImageSlider from 'react-native-image-slider';
 
 // Components Import
 import HeaderComponent from '../components/HeaderComponent';
 
-// Images
-import banner1 from '../assets/images/banner1.jpg';
+// Delegates
+import {
+  checkPermission,
+  isAppOpenedByRemoteNotificationWhenAppClosed,
+  resetIsAppOpenedByRemoteNotificationWhenAppClosed,
+} from '../firebase_api/FirebaseAPI';
+
+// References
+export let homeScreenFetchNotificationCount = null;
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      appState: AppState.currentState,
+    };
   }
+
+  componentDidMount = async () => {
+    await checkPermission();
+    // navigating to Notification screen
+    if (isAppOpenedByRemoteNotificationWhenAppClosed) {
+      resetIsAppOpenedByRemoteNotificationWhenAppClosed();
+      this.props.navigation.navigate('Notification');
+      return;
+    }
+
+    homeScreenFetchNotificationCount = this.fetchNotificationCount;
+    AppState.addEventListener('change', this.handleAppStateChange);
+  };
+
+  componentWillUnmount() {
+    homeScreenFetchNotificationCount = null;
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange = async nextAppState => {
+    try {
+      const {appState} = this.state;
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+        await this.fetchNotificationCount();
+      }
+      this.setState({appState: nextAppState});
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   handleNavProfile = () => {
     this.props.navigation.navigate('Profile');
@@ -27,6 +65,10 @@ export default class HomeScreen extends Component {
 
   handleNavNotification = () => {
     this.props.navigation.navigate('Notification');
+  };
+
+  handleNavSendNotification = () => {
+    this.props.navigation.navigate('SendNotification');
   };
 
   handleNavAssignments = () => {
@@ -53,6 +95,12 @@ export default class HomeScreen extends Component {
           style={styles.buttonContainer}
           onPress={this.handleNavNotification}>
           <Text style={styles.buttonText}>Notification</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.handleNavSendNotification}>
+          <Text style={styles.buttonText}>Send Notification</Text>
         </TouchableOpacity>
 
         <TouchableOpacity

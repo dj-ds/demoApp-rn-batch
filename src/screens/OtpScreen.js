@@ -66,13 +66,7 @@ export default class OTPVerificationScreen extends Component {
             // stopping loader
             this.setState({isProcessing: false});
 
-            if (userInfo.role === 'Admin') {
-              this.props.navigation.navigate('SuperAdmin');
-            } else if (userInfo.role === 'Counsellor') {
-              this.props.navigation.navigate('Home');
-            } else {
-              this.props.navigation.navigate('LoggedIn');
-            }
+            this.props.navigation.navigate('LoggedIn');
 
             // }
           } else {

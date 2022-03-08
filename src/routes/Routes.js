@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ExtraScreen from '../screens/ExtraScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import SendNotificationScreen from '../screens/SendNotificationScreen';
 
 // Assignments
 import HrAddAssignmentScreen from '../screens/Assignments/HrAddAssignmentScreen';
@@ -45,6 +46,7 @@ const LoggedInNavigator = createSwitchNavigator(
     EditProfile: EditProfileScreen,
     Extra: ExtraScreen,
     Notification: NotificationScreen,
+    SendNotification: SendNotificationScreen,
     Assignments: AssignmentsNavigator,
   },
   {

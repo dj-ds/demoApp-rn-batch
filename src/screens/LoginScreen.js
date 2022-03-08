@@ -66,14 +66,24 @@ export default class LoginScreen extends Component {
         const {success, message} = response;
 
         if (success) {
+          const info = response;
           const {userInfo} = response;
 
-          await storeData(KEYS.USER_INFO, userInfo);
+          if (userInfo) {
+            const {role} = userInfo;
+
+            if (role === 'Student') {
+              await storeData(KEYS.USER_INFO, userInfo);
+              Alert.alert('Login!', message);
+              this.props.navigation.navigate('LoggedIn');
+              return;
+            }
+          }
 
           // Navigating To Home
-          this.props.navigation.navigate('LoggedIn');
+          this.props.navigation.navigate('OTP', {info});
 
-          Alert.alert('Login!', 'Login Successful!');
+          Alert.alert('Login!', message);
         } else {
           Alert.alert('Alert!', message);
         }
