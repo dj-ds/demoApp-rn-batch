@@ -13,6 +13,8 @@ import {
 // Libraries
 import CheckBox from '@react-native-community/checkbox';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import showToast from '../components/CustomToast';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,100 +23,81 @@ import {
 // Images
 import logo from '../assets/appIcon/logo2.png';
 
+// API
+import {BASE_URL, makeRequest} from '../api/ApiInfo';
+
+// User Preference
+import {KEYS, storeData} from '../api/UserPreference';
+
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      name: '',
-      email: '',
-      mobile: '',
+      username: '',
       password: '',
-      isSelected: false,
-      isPickerVisible: false,
-      selectedDate: 'Pick A Date',
     };
   }
 
-  handleButton = () => {
-    this.props.navigation.push('OTP');
-  };
+  handleLogin = async () => {
+    const {username, password} = this.state;
 
-  showDatePicker = () => {
-    this.setState({isPickerVisible: true});
-  };
+    // Validations
+    if (username.trim() === '') {
+      Alert.alert('Alert!', 'Enter Username !');
+      return;
+    }
 
-  hideDatePicker = () => {
-    this.setState({isPickerVisible: false});
-  };
+    if (password.trim() === '') {
+      Alert.alert('Alert!', 'Enter Password !');
+      return;
+    }
 
-  handleConfirm = dateObj => {
-    // const date = dateObj.getDate();
-    // const month = dateObj.getMonth() + 1;
-    // const year = dateObj.getFullYear();
-    // const selectedDate = `${date}-${month}-${year}`;
+    try {
+      // params
+      const params = {
+        username,
+        password,
+      };
 
-    // this.setState({selectedDate});
+      const response = await makeRequest(BASE_URL + 'login', params);
 
-    this.hideDatePicker();
+      if (response) {
+        const {success, message} = response;
+
+        if (success) {
+          const {userInfo} = response;
+
+          await storeData(KEYS.USER_INFO, userInfo);
+
+          // Navigating To Home
+          this.props.navigation.navigate('LoggedIn');
+
+          Alert.alert('Login!', 'Login Successful!');
+        } else {
+          Alert.alert('Alert!', message);
+        }
+      } else {
+        Alert.alert('Alert!', 'Network Request Error');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   render() {
-    const {isSelected, isPickerVisible, selectedDate} = this.state;
-
     return (
       <View style={styles.container}>
         <Image source={logo} resizeMode="cover" style={styles.imageStyle} />
 
         <TextInput
-          placeholder="Enter Name"
+          placeholder="Enter Username / Enroll No."
           placeholderTextColor={'#ddd'}
           onChangeText={e => {
-            this.setState({name: e});
+            this.setState({username: e});
           }}
           style={styles.inputStyle}
         />
-
-        <TextInput
-          placeholder="Enter Email"
-          placeholderTextColor={'#ddd'}
-          onChangeText={e => {
-            this.setState({email: e});
-          }}
-          style={styles.inputStyle}
-        />
-
-        <TextInput
-          placeholder="Enter Mobile"
-          placeholderTextColor={'#ddd'}
-          maxLength={10}
-          keyboardType="number-pad"
-          onChangeText={e => {
-            this.setState({mobile: e});
-          }}
-          style={styles.inputStyle}
-        />
-
-        <View
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: '#fff',
-            width: wp(90),
-            alignSelf: 'center',
-            marginTop: hp(3),
-            paddingBottom: wp(2),
-          }}>
-          <TouchableOpacity onPress={this.showDatePicker}>
-            <Text style={styles.termsText}>{selectedDate}</Text>
-          </TouchableOpacity>
-
-          <DateTimePickerModal
-            isVisible={isPickerVisible}
-            mode="time"
-            onConfirm={this.handleConfirm}
-            onCancel={this.hideDatePicker}
-          />
-        </View>
 
         <TextInput
           placeholder="Enter Password"
@@ -126,21 +109,8 @@ export default class LoginScreen extends Component {
           secureTextEntry={true}
         />
 
-        <View style={styles.checkBoxView}>
-          <CheckBox
-            value={isSelected}
-            onValueChange={e => {
-              this.setState({isSelected: e});
-            }}
-            tintColors={{true: 'white', false: '#999'}}
-          />
-          <Text style={styles.termsText}>I Accept Terms & Conditions</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={this.handleButton}>
-          <Text style={styles.buttonTextStyle}>Send OTP !</Text>
+        <TouchableOpacity style={styles.buttonStyle} onPress={this.handleLogin}>
+          <Text style={styles.buttonTextStyle}>Login</Text>
         </TouchableOpacity>
       </View>
     );
@@ -153,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#444',
   },
   imageStyle: {
-    height: hp(20),
+    height: hp(25),
     aspectRatio: 1 / 1,
     alignSelf: 'center',
     marginTop: hp(10),

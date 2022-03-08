@@ -29,10 +29,6 @@ export default class HomeScreen extends Component {
     this.props.navigation.navigate('Notification');
   };
 
-  handleNavAssignments = () => {
-    this.props.navigation.navigate('Assignments');
-  };
-
   render() {
     const {activeTab} = this.state;
     const config = {
@@ -43,22 +39,27 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <HeaderComponent title="Home" nav={this.props.navigation} />
 
+        <ImageSlider
+          images={[banner1, banner1, banner1]}
+          //       images={[
+          //   'https://placeimg.com/640/640/nature',
+          //   'https://placeimg.com/640/640/people',
+          //   'https://placeimg.com/640/640/animals',
+          //   'https://placeimg.com/640/640/beer',
+          // ]}
+          loopBothSides
+          autoPlayWithInterval={3000}
+        />
+
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.handleNavProfile}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.handleNavNotification}>
           <Text style={styles.buttonText}>Notification</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={this.handleNavAssignments}>
-          <Text style={styles.buttonText}>Assignments</Text>
         </TouchableOpacity>
       </View>
     );
