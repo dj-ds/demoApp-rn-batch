@@ -3,14 +3,13 @@ import {Text, View} from 'react-native';
 
 import {LogBox} from 'react-native';
 
-// Ignore log notification by message:
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs(); //Ignore all log notifications
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 
 // Routes
 import {createAppContainer} from 'react-navigation';
-import {createRootNavigator} from './src/routes/Routes';
-import {nsSetTopLevelNavigator} from './src/routes/NavigationService';
+import {createRootNavigator} from 'navigation/routes';
+import {nsSetTopLevelNavigator} from 'navigation/routes/NavigationService';
 
 // User Preference
 import {KEYS, getData} from './src/api/UserPreference';
@@ -22,7 +21,7 @@ import {
   removeOnTokenRefreshListener,
   createNotificationListeners,
   removeNotificationListeners,
-} from './src/firebase_api/FirebaseAPI';
+} from 'utils/firebase_api/FirebaseAPI';
 
 export default class App extends Component {
   constructor(props) {
