@@ -72,7 +72,7 @@ export default class HomeScreen extends Component {
   };
 
   handleNavAssignments = () => {
-    this.props.navigation.navigate('Assignments');
+    this.props.navigation.navigate('Extra');
   };
 
   render() {
@@ -101,6 +101,12 @@ export default class HomeScreen extends Component {
           style={styles.buttonContainer}
           onPress={this.handleNavSendNotification}>
           <Text style={styles.buttonText}>Send Notification</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={this.handleNavAssignments}>
+          <Text style={styles.buttonText}>Send </Text>
         </TouchableOpacity>
       </View>
     );

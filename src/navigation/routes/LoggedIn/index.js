@@ -3,6 +3,7 @@ import {createSwitchNavigator} from 'react-navigation';
 // Screens
 import HomeScreen from 'views/containers/Home';
 import ExtraScreen from 'views/containers/Extra';
+import ContactList from 'views/containers/Contact';
 
 // Routes
 import Profile from './profile';
@@ -12,7 +13,7 @@ const LoggedInNavigator = createSwitchNavigator(
   {
     Home: HomeScreen,
     Profile: Profile,
-    Extra: ExtraScreen,
+    Extra: ContactList,
     Notification: Notification,
   },
   {
