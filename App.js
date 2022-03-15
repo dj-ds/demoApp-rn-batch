@@ -23,7 +23,10 @@ import {
   removeNotificationListeners,
 } from 'utils/firebase_api/FirebaseAPI';
 
-export default class App extends Component {
+// Redux
+import {connect} from 'react-redux';
+
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -73,3 +76,9 @@ export default class App extends Component {
     return <AppContainer ref={this.setNavigatorRef} />;
   }
 }
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

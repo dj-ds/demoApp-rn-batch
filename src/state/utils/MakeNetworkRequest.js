@@ -1,12 +1,21 @@
-import {encryptData} from './EncryptionUtility';
+import axios from 'axios';
 
+// Encryption
+import {encryptData} from './EncryptionUtility';
 // User Preference
 import {KEYS, getData} from './UserPreference';
 // Base URL
 export const BASE_URL = 'https://www.daac.in/api/mobile/'; /* New */
 
+const AXIOS = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'content-Type': 'multipart/form-data',
+  },
+});
+
 // Methods
-export const makeRequest = async (
+export const makeNetworkRequest = async (
   url,
   params = null,
   sendAuthorizationToken = false,
@@ -15,6 +24,8 @@ export const makeRequest = async (
   try {
     // request info
     let info = {};
+
+    info.url = url;
 
     if (params) {
       // request method
@@ -50,6 +61,7 @@ export const makeRequest = async (
         info.body = JSON.stringify(requestBody);
       } else {
         // preparing multipart/form-data
+
         const formData = new FormData();
         for (const key in params) {
           formData.append(key, params[key]);
@@ -84,14 +96,8 @@ export const makeRequest = async (
       }
     }
 
-    console.log('Request URL:', url);
-    console.log('Request Info:', info);
-
-    const response = await fetch(url, info);
-    // console.log('Request Response:', response);
-
-    const result = await response.json();
-    console.log('Request Result:', result);
+    const response = await AXIOS.request(info);
+    const result = response.data;
 
     return result;
   } catch (error) {

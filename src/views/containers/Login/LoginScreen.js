@@ -18,11 +18,11 @@ import {
 // Images
 import logo from 'assets/appIcon/logo2.png';
 
-// API
-import {BASE_URL, makeRequest} from '../../../api/ApiInfo';
+// // API
+// import {BASE_URL, makeRequest} from '../../../api/ApiInfo';
 
-// User Preference
-import {KEYS, storeData} from '../../../api/UserPreference';
+// // User Preference
+// import {KEYS, storeData} from '../../../api/UserPreference';
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -55,8 +55,10 @@ export default class LoginScreen extends Component {
         password,
       };
 
-      const response = await makeRequest(BASE_URL + 'login', params);
+      await this.props.login('login', params);
 
+      const {isLogin: response} = this.props;
+      console.log('Response', response);
       if (response) {
         const {success, message} = response;
 
@@ -64,19 +66,19 @@ export default class LoginScreen extends Component {
           const info = response;
           const {userInfo} = response;
 
-          if (userInfo) {
-            const {role} = userInfo;
+          // if (userInfo) {
+          //   const {role} = userInfo;
 
-            if (role === 'Student') {
-              await storeData(KEYS.USER_INFO, userInfo);
-              Alert.alert('Login!', message);
-              this.props.navigation.navigate('LoggedIn');
-              return;
-            }
-          }
+          //   // if (role === 'Student') {
+          //   //   await storeData(KEYS.USER_INFO, userInfo);
+          //   //   Alert.alert('Login!', message);
+          //   //   this.props.navigation.navigate('LoggedIn');
+          //   //   return;
+          //   // }
+          // }
 
           // Navigating To Home
-          this.props.navigation.navigate('OTP', {info});
+          this.props.navigation.navigate('LoggedIn', {info});
 
           Alert.alert('Login!', message);
         } else {

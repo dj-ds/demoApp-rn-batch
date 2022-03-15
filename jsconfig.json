@@ -4,6 +4,7 @@
     "paths": {
       "assets/*": ["assets/*"],
       "navigation/*": ["navigation/*"],
+      "state/*": ["state/*"],
       "utils/*": ["utils/*"],
       "views/*": ["views/*"]
     }
