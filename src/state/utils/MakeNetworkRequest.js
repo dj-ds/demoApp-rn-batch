@@ -96,6 +96,7 @@ export const makeNetworkRequest = async (
       }
     }
 
+    console.log('Response Info', info);
     const response = await AXIOS.request(info);
     const result = response.data;
 

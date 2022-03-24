@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     margin: wp(4),
   },
   inputStyle: {
-    marginTop: hp(2),
+    marginTop: hp(4),
     width: '90%',
     color: '#fff',
     borderBottomWidth: 1,

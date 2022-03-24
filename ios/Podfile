@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '12.1'
 
 target 'DemoApp' do
   config = use_native_modules!
@@ -12,6 +12,15 @@ target 'DemoApp' do
     :hermes_enabled => false
   )
 
+  # Firebase SDK
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Core', '~> 6.5.0'
+  
+  # user permissions
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary"
+  
   target 'DemoAppTests' do
     inherit! :complete
     # Pods for testing
